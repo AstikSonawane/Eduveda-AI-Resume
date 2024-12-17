@@ -5,6 +5,7 @@ import fitz  # PyMuPDF
 import google.generativeai as genai
 from dotenv import load_dotenv
 import google.api_core.exceptions
+import time
 
 # Load environment variables
 load_dotenv()
@@ -22,7 +23,7 @@ def extract_text_from_pdf(uploaded_file):
 # AI model function with error handling
 def get_gemini_response(input, pdf_content, prompt):
     model = genai.GenerativeModel('gemini-1.5-pro')
-    
+    time.sleep(5)  # Add a small delay to avoid rate-limiting issues
     try:
         response = model.generate_content([input, pdf_content, prompt])
         return response.text
@@ -31,6 +32,9 @@ def get_gemini_response(input, pdf_content, prompt):
         return None
     except google.api_core.exceptions.GoogleAPICallError as e:
         st.error(f"An error occurred with the AI service: {e}")
+        return None
+    except Exception as e:
+        st.error(f"An unexpected error occurred: {e}")
         return None
 
 # Streamlit App Config with Custom Favicon
@@ -181,6 +185,7 @@ input_prompt_resume = "Using the provided job description and the uploaded resum
 if uploaded_file is not None:
     pdf_text = extract_text_from_pdf(uploaded_file)
 
+# Button actions (more robust handling of user interactions)
 if analyze_button:
     with st.spinner("Analyzing resume..."):
         response = get_gemini_response(input_text, pdf_text, input_prompt1)
