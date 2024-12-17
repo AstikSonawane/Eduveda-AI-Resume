@@ -38,7 +38,7 @@ def get_gemini_response(input, pdf_content, prompt):
 
 # Streamlit App Config with Custom Favicon
 st.set_page_config(
-    page_title="EDUVEDA",
+    page_title="Resume AI",
     page_icon="logo.png",
     layout="centered"
 )
@@ -46,18 +46,10 @@ st.set_page_config(
 # Custom CSS for Modern UI
 st.markdown("""
     <style>
-        [data-testid="stAppViewContainer"] {
-        background-image: url('https://images.unsplash.com/photo-1642355008521-236f1d29d0a8?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-        background-size: cover;
-        background-position: center;
-        height: 100%;
-        padding-top: 50px; /* Adds some space for the header */
-    }
-
     /* App background color */
     .app-background {
-        background-color: #EEEEEE;
-        color: #FFFFFF; /* Change font color to white */
+        background-color: #F8F9FA;
+        color: #333;
     }
 
     /* Header and Logo */
@@ -93,13 +85,13 @@ st.markdown("""
         border-radius: 10px;
         padding: 15px;
         text-align: center;
-        color: white; /* Change font color to white */
+        color: #333;
     }
 
     /* Input fields */
     textarea, .stTextInput input {
         background-color: #F0F0F0;
-        color: white; /* Change font color to white */
+        color: #333;
         border-radius: 10px;
         border: 1px solid #ccc;
         padding: 10px;
@@ -108,7 +100,7 @@ st.markdown("""
 
     /* Subheaders */
     .stSubheader {
-        color: white; /* Change font color to white */
+        color: #333;
         font-size: 22px;
         font-weight: 600;
     }
@@ -116,7 +108,7 @@ st.markdown("""
     /* Footer */
     .footer {
         font-size: 14px;
-        color: white; /* Change font color to white */
+        color: #666;
         text-align: center;
         padding: 10px 0;
     }
@@ -177,7 +169,7 @@ input_text = st.text_area("Enter the Job Description", placeholder="Paste the jo
 
 # Resume Upload Section
 st.markdown("<div class='upload-area'>Upload your resume (PDF only)</div>", unsafe_allow_html=True)
-uploaded_file = st.file_uploader("Upload Resume", type=["pdf"])
+uploaded_file = st.file_uploader("", type=["pdf"])
 
 # Action Buttons (Optimized for Mobile View)
 col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
@@ -236,6 +228,7 @@ if generate_resume_button:
             st.write(tailored_resume)
     else:
         st.warning("Please upload your resume to proceed.")
+
 
 # Footer with credits and links
 st.markdown("""
