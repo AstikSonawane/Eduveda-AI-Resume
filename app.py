@@ -47,7 +47,7 @@ st.set_page_config(
 st.markdown("""
     <style>
     /* App background color */
-    .app-background {
+    body {
         background-color: #EEEEEE;
         color: #000000;
     }
@@ -155,6 +155,7 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # Logo Section - Centered Logo
 logo_path = "aire.png"
