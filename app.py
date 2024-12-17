@@ -37,6 +37,7 @@ def get_gemini_response(input, pdf_content, prompt):
         return None
 
 # Streamlit App Config with Custom Favicon
+# Streamlit App Config with Custom Favicon
 st.set_page_config(
     page_title="EDUVEDA",
     page_icon="logo.png",
@@ -47,7 +48,7 @@ st.set_page_config(
 st.markdown("""
     <style>
     /* App background color */
-    body {
+    body, .css-1v3fvcr {
         background-color: #EEEEEE;
         color: #000000;
     }
@@ -155,6 +156,7 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 
 # Logo Section - Centered Logo
