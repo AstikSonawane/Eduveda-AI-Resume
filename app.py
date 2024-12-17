@@ -37,7 +37,6 @@ def get_gemini_response(input, pdf_content, prompt):
         return None
 
 # Streamlit App Config with Custom Favicon
-# Streamlit App Config with Custom Favicon
 st.set_page_config(
     page_title="EDUVEDA",
     page_icon="logo.png",
@@ -50,7 +49,7 @@ st.markdown("""
     /* App background color */
     body, .css-1v3fvcr {
         background-color: #EEEEEE;
-        color: #000000;
+        color: white;  /* Set font color to white */
     }
 
     /* Header and Logo */
@@ -65,7 +64,7 @@ st.markdown("""
     /* Green button styling */
     .stButton>button {
         background: #28a745;
-        color: white;
+        color: white;  /* Button text color white */
         border-radius: 8px;
         padding: 12px 20px;
         font-weight: bold;
@@ -86,13 +85,13 @@ st.markdown("""
         border-radius: 10px;
         padding: 15px;
         text-align: center;
-        color: #333;
+        color: white;  /* File upload text color white */
     }
 
     /* Input fields */
     textarea, .stTextInput input {
         background-color: #F0F0F0;
-        color: #333;
+        color: white;  /* Input field text color white */
         border-radius: 10px;
         border: 1px solid #ccc;
         padding: 10px;
@@ -101,7 +100,7 @@ st.markdown("""
 
     /* Subheaders */
     .stSubheader {
-        color: #333;
+        color: white;  /* Subheader text color white */
         font-size: 22px;
         font-weight: 600;
     }
@@ -109,7 +108,7 @@ st.markdown("""
     /* Footer */
     .footer {
         font-size: 14px;
-        color: #666;
+        color: white;  /* Footer text color white */
         text-align: center;
         padding: 10px 0;
     }
@@ -156,6 +155,7 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 
 
