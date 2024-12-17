@@ -8,6 +8,7 @@ import google.api_core.exceptions
 import time
 
 # Load environment variables
+GOOGLE_API_KEY="AIzaSyA3uUoySB_FZp0Kx50278Azp0K4HE9FinM"
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
