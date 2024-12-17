@@ -8,26 +8,42 @@ import google.api_core.exceptions
 import time
 
 # Load environment variables
-
 load_dotenv()
-genai.configure(api_key=os.getenv("AIzaSyA3uUoySB_FZp0Kx50278Azp0K4HE9FinM"))
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 
 # Helper function to extract text from PDF
 def extract_text_from_pdf(uploaded_file):
-    doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
-    text = ""
-    for page_num in range(len(doc)):
-        page = doc.load_page(page_num)
-        text += page.get_text("text")  # Extract text from each page
-    return text
+    try:
+        if uploaded_file.name.lower().endswith(".pdf"):
+             doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+             text = ""
+             for page_num in range(len(doc)):
+                 page = doc.load_page(page_num)
+                 text += page.get_text("text")
+             if not text.strip():  # Check if extracted text is empty
+                 st.error("The uploaded PDF is empty.")
+                 return None
+             return text
+        else:
+              st.error("Uploaded file is not a PDF. Please upload a PDF document.")
+              return None
+    except Exception as e:
+        st.error(f"Error reading PDF: {e}")
+        return None
+
 
 # AI model function with error handling
-def get_gemini_response(input, pdf_content, prompt):
+def get_gemini_response(input_text, pdf_content, prompt):
+    if not input_text or not pdf_content:
+        st.warning("Please enter job description and upload resume.")
+        return None
     model = genai.GenerativeModel('gemini-1.5-pro')
-    time.sleep(5)  # Add a small delay to avoid rate-limiting issues
+    #time.sleep(1) # No need for time.sleep
     try:
-        response = model.generate_content([input, pdf_content, prompt])
-        return response.text
+        with st.spinner("Processing..."):  # Show a Streamlit loading spinner
+             response = model.generate_content([prompt, f"Job Description: {input_text}", f"Resume: {pdf_content}"])
+             return response.text
     except google.api_core.exceptions.ResourceExhausted:
         st.error("The service is temporarily unavailable due to high demand. Please try again after a few moments.")
         return None
@@ -177,46 +193,72 @@ with col4:
     generate_resume_button = st.button("Generate Tailored Resume")
 
 # Prompts
-input_prompt1 = "You are an experienced Technical Human Resource Manager,your task is to review the provided resume against the job description. Please share your professional evaluation on whether the candidate's profile aligns with the role. Highlight the strengths and weaknesses of the applicant in relation to the specified job requirements."
+input_prompt1 = "You are an experienced Technical Human Resource Manager, your task is to review the provided resume against the job description. Please share your professional evaluation on whether the candidate's profile aligns with the role. Highlight the strengths and weaknesses of the applicant in relation to the specified job requirements."
 input_prompt3 = "You are an skilled ATS (Applicant Tracking System) scanner with a deep understanding of data science and ATS functionality, your task is to evaluate the resume against the provided job description. give me the percentage of match if the resume matches the job description (ats score). First the output should come as percentage and then keywords missing and last final thoughts."
-input_prompt_cover_letter = "Based on the job description and my uploaded resume, create a professional, three-paragraph cover letter. In the first paragraph, mention the [role] I'm applying for and how I learned about this opportunity. In the second paragraph, highlight my relevant skills, experiences, and accomplishments that align with the job description. In the third and final paragraph, express my enthusiasm for the role, thank the recruiters for their time, and convey my excitement for the next stages of the hiring process and sincerely [name]"
-input_prompt_resume = "Using the provided job description and the uploaded resume, create a tailored resume that best fits the requirements of the job. Make sure to highlight the relevant skills, experience (make sure in bullet points), and qualifications from the resume that match the job description. If any areas of improvement or additions are needed, suggest modifications to ensure the resume aligns with the job's key requirements. The tailored resume should showcase the most relevant aspects of the candidate's experience that directly correspond to the role, skills, and qualifications mentioned in the job description."
+input_prompt_cover_letter = """
+    You are a professional resume writer. Based on the job description and the provided resume, please create a professional cover letter.
+    Make sure you output cover letter in the following format:
+    
+    [First Paragraph]: Should include a sentence mentioning the job role. How and where did the applicant find the opportunity.
+    
+    [Second Paragraph]: Should include applicant's skills, experience, and accomplishments that align with the job description.
+    
+    [Third Paragraph]: Should include expression of the applicant's enthusiasm for the role. The closing should thank the recruiters for their time, and excitement for the next stages of the hiring process and sincerely followed by applicant's name.
+    
+    Make sure the output you are providing follows the format given above.
+    """
+input_prompt_resume = """
+    You are a professional resume writer. Based on the job description and the provided resume, please create a tailored resume.
+    Make sure you output resume in the following format:
+    
+    [Skills]: Should list the skills relevant to the job description.
+    
+    [Experience]: Should list experiences with the job description (make sure to include bullet points for each experience)
+    
+    Make sure the output you are providing follows the format given above.
+    """
 
 # Analysis & Response - Ensure buttons are working independently and not preventing others
-if uploaded_file is not None:
+pdf_text = None
+if uploaded_file:
     pdf_text = extract_text_from_pdf(uploaded_file)
 
 # Button actions (more robust handling of user interactions)
 if analyze_button:
-    with st.spinner("Analyzing resume..."):
+     if pdf_text:
         response = get_gemini_response(input_text, pdf_text, input_prompt1)
         if response:
-            st.subheader("Resume Analysis")
-            st.write(response)
+           st.subheader("Resume Analysis")
+           st.write(response)
+     else:
+          st.warning("Please upload a resume to analyze.")
 
-elif match_button:
-    with st.spinner("Calculating match percentage..."):
+if match_button:
+     if pdf_text:
         response = get_gemini_response(input_text, pdf_text, input_prompt3)
         if response:
-            st.subheader("Match Percentage & Recommendations")
-            st.write(response)
+           st.subheader("Match Percentage & Recommendations")
+           st.write(response)
+     else:
+          st.warning("Please upload a resume to check ATS Score.")
 
-elif generate_cover_letter_button:
-    with st.spinner("Generating cover letter..."):
+if generate_cover_letter_button:
+    if pdf_text:
         cover_letter = get_gemini_response(input_text, pdf_text, input_prompt_cover_letter)
         if cover_letter:
-            st.subheader("Tailored Cover Letter")
-            st.write(cover_letter)
+           st.subheader("Tailored Cover Letter")
+           st.write(cover_letter)
+    else:
+          st.warning("Please upload a resume to generate cover letter.")
 
-elif generate_resume_button:
-    with st.spinner("Generating tailored resume..."):
+if generate_resume_button:
+    if pdf_text:
         tailored_resume = get_gemini_response(input_text, pdf_text, input_prompt_resume)
         if tailored_resume:
-            st.subheader("Tailored Resume")
-            st.write(tailored_resume)
-
-else:
-    st.warning("Please upload your resume to proceed.")
+           st.subheader("Tailored Resume")
+           st.write(tailored_resume)
+    else:
+         st.warning("Please upload a resume to generate tailored resume.")
 
 # Footer with credits and links
 st.markdown("""
