@@ -173,22 +173,22 @@ if os.path.exists(logo_path):
 
 # Job Description Input Section
 st.subheader("Job Description")
-input_text = st.text_area("Enter the Job Description", placeholder="Paste the job description here...", key="input", label_visibility="hidden")
+input_text = st.text_area("Enter the Job Description", placeholder="Paste the job description here...", key="input")
 
 # Resume Upload Section
 st.markdown("<div class='upload-area'>Upload your resume (PDF only)</div>", unsafe_allow_html=True)
-uploaded_file = st.file_uploader("Upload Resume", type=["pdf"], label_visibility="hidden")
+uploaded_file = st.file_uploader("Upload Resume", type=["pdf"])
 
 # Action Buttons (Optimized for Mobile View)
 col1, col2, col3, col4 = st.columns([1, 1, 1, 2])
 with col1:
-    analyze_button = st.button("Analyze Resume", label_visibility="hidden")
+    analyze_button = st.button("Analyze Resume")
 with col2:
-    match_button = st.button("ATS Score", label_visibility="hidden")
+    match_button = st.button("ATS Score")
 with col3:
-    generate_cover_letter_button = st.button("Generate Cover Letter", label_visibility="hidden")
+    generate_cover_letter_button = st.button("Generate Cover Letter")
 with col4:
-    generate_resume_button = st.button("Generate Tailored Resume", label_visibility="hidden")
+    generate_resume_button = st.button("Generate Tailored Resume")
 
 # Prompts
 input_prompt1 = " You are an experienced Technical Human Resource Manager,your task is to review the provided resume against the job description. Please share your professional evaluation on whether the candidate's profile aligns with the role. Highlight the strengths and weaknesses of the applicant in relation to the specified job requirements."
