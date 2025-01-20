@@ -261,10 +261,10 @@ if generate_resume_button:
          st.warning("Please upload a resume to generate tailored resume.")
 
 # Footer with credits and links
-st.markdown("""
-    <div class='footer'>
-        Developed by <strong>Gayatri Thakre</strong> |
-        <a href='https://www.linkedin.com/in/gaytri-thakre-19124b232/' target='_blank'>LinkedIn</a> |
-        <a href='https://github.com/Gaytri-Thakre' target='_blank'>GitHub</a>
-    </div>
-""", unsafe_allow_html=True)
+#st.markdown("""
+   # <div class='footer'>
+    #    Developed by <strong>Gayatri Thakre</strong> |
+    #    <a href='https://www.linkedin.com/in/gaytri-thakre-19124b232/' target='_blank'>LinkedIn</a> |
+     #   <a href='https://github.com/Gaytri-Thakre' target='_blank'>GitHub</a>
+   # </div>
+#""", unsafe_allow_html=True)
