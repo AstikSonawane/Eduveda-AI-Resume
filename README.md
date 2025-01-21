@@ -2,6 +2,8 @@
 
 A Streamlit web app designed to help users tailor their resumes and generate personalized cover letters. By analyzing job descriptions and resumes, this tool leverages Google's Gemini AI to assess the alignment between the user's profile and the job requirements. It also calculates ATS (Applicant Tracking System) scores to improve job application success.
 
+https://eduveda-ai-resume-fyp-gayu55.streamlit.app/
+
 ## Features
 
 - **Job Description Analysis**: Input job descriptions to understand key skills and requirements.
